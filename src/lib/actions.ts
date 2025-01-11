@@ -14,12 +14,20 @@ export async function getJobPostingMarkdown(jobPostingUrl: string) {
   const html = await res.text();
 
   const dom = new JSDOM(html);
+  console.log(html);
   const elements = Array.from(
     dom.window.document.getElementsByClassName("decorated-job-posting__details")
   );
 
+  const jobTitle = dom.window.document.querySelector(
+    'title'
+  )?.textContent;
+
   // Single file
   const str = NodeHtmlMarkdown.translate(elements[0].innerHTML);
 
-  return str;
+  return {
+    jobTitle,
+    jobDescription: str,
+  };
 }
